@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block con %}
+    <div class="container mt-5 mb-5">
+        <h1><b>TRANS</b></h1>
+        <form method="post" name="transForm">
+            {% csrf_token %}
+            <div class="row mt-5">
+                <div class="col-lg-5">
+                    <textarea name="bf" class="form-control" placeholder="번역할 텍스트를 입력하세요" style="height:320px">{{ bf }}</textarea>
+                </div>
+                <div class="col-lg-2 text-center" style="margin:auto">
+                    <select name="fr" size="5" class="form-select">
+                        {% for k, v in nd.items %}
+                            <option value="{{ k }}" {% if fr %} {% if fr == k %}selected{% endif %} {% else %} {% if k == 'en' %}selected{% endif %} {% endif %}>{{ v|upper }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="mt-3 mb-3">
+                        <button type="button" onclick="trans()" class="btn btn-dark">번역</button>
+                    </div>
+                    <select name="to" size="5" class="form-select">
+                        {% for k, v in nd.items %}
+                            <option value="{{ k }}" {% if fr %} {% if to == k %}selected{% endif %} {% else %} {% if k == 'ko' %}selected{% endif %} {% endif %}>{{ v|upper }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-5">
+                    <textarea disabled class="form-control" style="height:320px">{{ af }}</textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function trans(){
+            t = document.transForm;
+            if(!t.bf.value){
+                alert("번역할 내용을 입력하세요!");
+            }else if(t.fr.value == t.to.value){
+                alert("다른 언어를 선택해주세요.")
+            }else{
+                t.submit()
+            }
+        }
+    </script>
+{% endblock %}
